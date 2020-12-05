@@ -10,20 +10,25 @@ namespace AdventOfCode
         {
             Console.Write("Enter a day : ");
             var day = int.Parse(Console.ReadLine());
-            switch (day)
+            if (day == 1)
             {
-                case 1:
-                    var list = File.ReadAllLines("day-1.txt").Select(int.Parse).ToArray();
+                var list = File.ReadAllLines("day-1.txt").Select(int.Parse).ToArray();
 
-                    var answer1 = Methods.GetItemsWhichSumToTarget(list, 2020, 2);
-                    Console.WriteLine($"Part 1 Answer : {Methods.MultiplyItems(answer1)}");
+                var answer1 = Methods.GetItemsWhichSumToTarget(list, 2020, 2);
+                Console.WriteLine($"Part 1 Answer : {Methods.MultiplyItems(answer1)}");
 
-                    var answer2 = Methods.GetItemsWhichSumToTarget(list, 2020, 3);
-                    Console.WriteLine($"Part 2 Answer : {Methods.MultiplyItems(answer2)}");
+                var answer2 = Methods.GetItemsWhichSumToTarget(list, 2020, 3);
+                Console.WriteLine($"Part 2 Answer : {Methods.MultiplyItems(answer2)}");
+            }
+            else if (day == 2)
+            {
+                var list = File.ReadAllLines("day-2.txt").ToArray();
 
-                    break;
-                default:
-                    break;
+                var answer1 = Methods.GetNumberOfValidPasswords(list, false);
+                Console.WriteLine($"Part 1 Answer : {answer1}");
+
+                var answer2 = Methods.GetNumberOfValidPasswords(list, true);
+                Console.WriteLine($"Part 2 Answer : {answer2}");
             }
             
         }

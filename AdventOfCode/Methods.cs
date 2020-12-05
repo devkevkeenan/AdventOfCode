@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode
 {
@@ -73,6 +74,40 @@ namespace AdventOfCode
         public static int MultiplyItems(int[] list)
         {
             return list.Aggregate(1, (x, y) => x * y);
+        }
+
+        private static readonly Regex PasswordRegex = new Regex(@"^([0-9]*)-([0-9]*) ([a-z]): ([a-z]+)$");
+        public static int GetNumberOfValidPasswords(string[] list, bool usePositionRule)
+        {
+            var result = 0;
+            
+            foreach (var item in list)
+            {
+                var regexMatch = PasswordRegex.Match(item);
+                var minValue = int.Parse(regexMatch.Groups[1].Value);
+                var maxValue = int.Parse(regexMatch.Groups[2].Value);
+                var charToMatch = char.Parse(regexMatch.Groups[3].Value);
+                var password = regexMatch.Groups[4].Value;
+
+                var numberOfInstances = password.Count(x => x == charToMatch);
+
+                if (usePositionRule)
+                {
+                    if (password[minValue-1] == charToMatch ^ password[maxValue-1] == charToMatch)
+                    {
+                        result++;
+                    }
+                }
+                else
+                {
+                    if (numberOfInstances >= minValue && numberOfInstances <= maxValue)
+                    {
+                        result++;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }
