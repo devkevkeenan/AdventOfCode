@@ -33,8 +33,25 @@ namespace AdventOfCode
             else if (day == 3)
             {
                 var list = File.ReadAllLines("day-3.txt").ToArray();
+                var map = Methods.GetMap(list);
 
-                
+                var answer1 = Methods.GetNumberOfCollisions(map, 3, 1);
+                Console.WriteLine($"Part 1 Answer : {answer1}");
+
+                var answer2Scenarios = new Tuple<int, int>[]
+                {
+                    new Tuple<int, int>(1, 1),
+                    new Tuple<int, int>(3, 1),
+                    new Tuple<int, int>(5, 1),
+                    new Tuple<int, int>(7, 1),
+                    new Tuple<int, int>(1, 2)
+                };
+
+                var answer2s = answer2Scenarios.Select(x => Methods.GetNumberOfCollisions(map, x.Item1, x.Item2))
+                    .ToArray();
+
+                var answer2 = Methods.MultiplyItems(answer2s);
+                Console.WriteLine($"Part 2 Answer : {answer2}");
             }
 
         }

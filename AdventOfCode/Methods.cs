@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -71,9 +72,9 @@ namespace AdventOfCode
             return new[] { list[i], list[j] };
         }
 
-        public static int MultiplyItems(int[] list)
+        public static long MultiplyItems(int[] list)
         {
-            return list.Aggregate(1, (x, y) => x * y);
+            return list.Aggregate<int, long>(1, (current, item) => current * item);
         }
 
         private static readonly Regex PasswordRegex = new Regex(@"^([0-9]*)-([0-9]*) ([a-z]): ([a-z]+)$");
@@ -105,6 +106,37 @@ namespace AdventOfCode
                         result++;
                     }
                 }
+            }
+
+            return result;
+        }
+
+        public static bool[,] GetMap(string[] list)
+        {
+            var result = new bool[list[0].Length, list.Length];
+
+            for (int y = 0; y < list.Length; y++)
+            {
+                for (int x = 0; x < list[0].Length; x++)
+                {
+                    result[x, y] = list[y][x] == '#';
+                }
+            }
+
+            return result;
+        }
+
+        public static int GetNumberOfCollisions(bool[,] map, int xMovement, int yMovement)
+        {
+            var result = 0;
+            var xPos = 0;
+            var yPos = 0;
+
+            while (yPos < map.GetLength(1))
+            {
+                result += map[xPos, yPos] ? 1 : 0;
+                xPos = (xPos + xMovement) % map.GetLength(0);
+                yPos += yMovement;
             }
 
             return result;
