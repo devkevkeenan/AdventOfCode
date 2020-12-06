@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace AdventOfCode.Tests.Solutions
+namespace AdventOfCode.Tests.MethodTests
 {
     public class GetItemsWhichSumToTargetTests
     {
@@ -18,7 +17,7 @@ namespace AdventOfCode.Tests.Solutions
         [TestCase(new[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 10 }, 17, 3, ExpectedResult = new[] { 1, 6, 10 })]
         public int[] GetItemsWhichSumToTarget(int[] list, int target, int numberOfItems)
         {
-            return Methods.GetItemsWhichSumToTarget(list, target, numberOfItems);
+            return AdventOfCode.Methods.GetItemsWhichSumToTarget(list, target, numberOfItems);
         }
     }
 }

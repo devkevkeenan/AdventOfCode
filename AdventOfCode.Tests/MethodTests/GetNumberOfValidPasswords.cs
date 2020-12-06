@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace AdventOfCode.Tests.Solutions
+namespace AdventOfCode.Tests.MethodTests
 {
     public class GetNumberOfValidPasswordsTests
     {

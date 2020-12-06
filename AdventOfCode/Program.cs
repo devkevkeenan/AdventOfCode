@@ -30,7 +30,13 @@ namespace AdventOfCode
                 var answer2 = Methods.GetNumberOfValidPasswords(list, true);
                 Console.WriteLine($"Part 2 Answer : {answer2}");
             }
-            
+            else if (day == 3)
+            {
+                var list = File.ReadAllLines("day-3.txt").ToArray();
+
+                
+            }
+
         }
     }
 }
