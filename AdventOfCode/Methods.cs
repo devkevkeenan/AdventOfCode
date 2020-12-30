@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -78,6 +79,7 @@ namespace AdventOfCode
         }
 
         private static readonly Regex PasswordRegex = new Regex(@"^([0-9]*)-([0-9]*) ([a-z]): ([a-z]+)$");
+
         public static int GetNumberOfValidPasswords(string[] list, bool usePositionRule)
         {
             var result = 0;
@@ -140,6 +142,113 @@ namespace AdventOfCode
             }
 
             return result;
+        }
+
+        private static readonly string[] RequiredKeys = new[] {"ecl", "pid", "eyr", "hcl", "byr", "iyr", "hgt"};
+        
+        public static int GetNumberOfValidPassports(List<Dictionary<string, string>> passports, Func<Dictionary<string, string>, bool> validCriteria)
+        {
+            return passports.Count(validCriteria);
+        }
+
+        public static bool PassportMeetsValidation(Dictionary<string, string> passport)
+        {
+            return RequiredKeys.All(passport.ContainsKey);
+        }
+
+        public static bool PassportHasRequiredFields(Dictionary<string, string> passport)
+        {
+            if (!PassportMeetsValidation(passport))
+                return false;
+
+            var valid = true;
+            foreach (var keyValuePair in passport)
+            {
+                switch (keyValuePair.Key)
+                {
+                    case "byr":
+                        //(Birth Year) -four digits; at least 1920 and at most 2002.
+                        if (!ValueIsInRange(keyValuePair.Value, 1920, 2002))
+                            valid = false;
+                        break;
+                    case "iyr":
+                        //(Issue Year) - four digits; at least 2010 and at most 2020.
+                        if (!ValueIsInRange(keyValuePair.Value, 2010, 2020))
+                            valid = false;
+                        break;
+                    case "eyr":
+                        //(Expiration Year) - four digits; at least 2020 and at most 2030.
+                        if (!ValueIsInRange(keyValuePair.Value, 2020, 2030))
+                            valid = false;
+                        break;
+                    case "hgt":
+                        //(Height) - a number followed by either cm or in:
+                        //If cm, the number must be at least 150 and at most 193.
+                        //If in, the number must be at least 59 and at most 76.
+                        var unit = keyValuePair.Value.Substring(Math.Max(0, keyValuePair.Value.Length - 2));
+                        if (unit != "cm" && unit != "in")
+                            valid = false;
+                        else
+                        {
+                            var number = keyValuePair.Value.Substring(0, keyValuePair.Value.Length - 2);
+                            if (unit == "cm" && !ValueIsInRange(number, 150, 193))
+                                valid = false;
+                            else if (unit == "in" && !ValueIsInRange(number, 59, 76))
+                                valid = false;
+
+                        }
+
+                        break;
+                    case "hcl":
+                        //(Hair Color) - a # followed by exactly six characters 0-9 or a-f.
+                        if (!Regex.IsMatch(keyValuePair.Value, "^#[0123456789abcdef]{6}$"))
+                            valid = false;
+                        break;
+                    case "ecl":
+                        //(Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
+                        if (!Regex.IsMatch(keyValuePair.Value, "^amb|blu|brn|gry|grn|hzl|oth$"))
+                            valid = false;
+                        break;
+                    case "pid":
+                        //(Passport ID) - a nine - digit number, including leading zeroes.
+                        if (!Regex.IsMatch(keyValuePair.Value, "^[0-9]{9}$"))
+                            valid = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return valid;
+        }
+
+        private static bool ValueIsInRange(string stringValue, int minValue, int maxValue)
+        {
+            return int.TryParse(stringValue, out var intValue) && intValue >= minValue && intValue <= maxValue;
+        }
+
+        public static List<Dictionary<string, string>> GetPassports(string[] list)
+        {
+            var passports = new List<Dictionary<string, string>> {new Dictionary<string, string>()};
+
+            foreach (var line in list)
+            {
+                if (string.IsNullOrEmpty(line))
+                {
+                    passports.Add(new Dictionary<string, string>());
+                }
+                else
+                {
+                    var lineItems = line.Split(" ");
+                    foreach (var lineItem in lineItems)
+                    {
+                        var components = lineItem.Split(":");
+                        passports.Last().Add(components[0], components[1]);
+                    }
+                }
+            }
+
+            return passports;
         }
     }
 }

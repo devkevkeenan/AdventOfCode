@@ -53,6 +53,15 @@ namespace AdventOfCode
                 var answer2 = Methods.MultiplyItems(answer2s);
                 Console.WriteLine($"Part 2 Answer : {answer2}");
             }
+            else if (day == 4)
+            {
+                var list = File.ReadAllLines("day-4.txt").ToArray();
+                var passports = Methods.GetPassports(list);
+                var answer1 = Methods.GetNumberOfValidPassports(passports, Methods.PassportMeetsValidation);
+                Console.WriteLine($"Part 1 Answer : {answer1}");
+                var answer2 = Methods.GetNumberOfValidPassports(passports, Methods.PassportHasRequiredFields);
+                Console.WriteLine($"Part 2 Answer : {answer2}");
+            }
 
         }
     }
