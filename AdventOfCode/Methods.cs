@@ -7,6 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -249,6 +252,52 @@ namespace AdventOfCode
             }
 
             return passports;
+        }
+
+        public static int GetHighestSeat(string[] list)
+        {
+            return list.Max(GetSeat);
+        }
+
+        public static int? GetMissingSeat(string[] list)
+        {
+            var numbers = list.Select(GetSeat).OrderBy(x => x).ToArray();
+
+            for (var i = 1; i < numbers.Length; i++)
+            {
+                if (numbers[i - 1] + 2 == numbers[i])
+                {
+                    return numbers[i] - 1;
+                }
+            }
+
+            return null;
+        }
+
+        public static int GetSeat(string id)
+        {
+            var binary = id.Replace("F", "0")
+                .Replace("B", "1")
+                .Replace("L", "0")
+                .Replace("R", "1");
+
+            return Convert.ToInt32(binary, 2);
+        }
+
+        public static int GetAnyYesAnswerCount(string[] answers)
+        {
+            return string.Join("", answers).Distinct().Count();
+        }
+
+        public static int GetAllYesAnswerCount(string[] answers)
+        {
+            IEnumerable<char> final = answers[0];
+            for (var i = 1; i < answers.Length; i++)
+            {
+                final = final.Intersect(answers[i]);
+            }
+
+            return final.Count();
         }
     }
 }

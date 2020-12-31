@@ -62,7 +62,23 @@ namespace AdventOfCode
                 var answer2 = Methods.GetNumberOfValidPassports(passports, Methods.PassportHasRequiredFields);
                 Console.WriteLine($"Part 2 Answer : {answer2}");
             }
-
+            else if (day == 5)
+            {
+                var list = File.ReadAllLines("day-5.txt").ToArray();
+                var answer1 = Methods.GetHighestSeat(list);
+                Console.WriteLine($"Part 1 Answer : {answer1}");
+                var answer2 = Methods.GetMissingSeat(list);
+                Console.WriteLine($"Part 2 Answer : {answer2}");
+            }
+            else if (day == 6)
+            {
+                var text = File.ReadAllText("day-6.txt");
+                var groups = text.Split("\n\n").Select(x => x.Split("\n").ToArray()).ToArray();
+                var answer1 = groups.Sum(Methods.GetAnyYesAnswerCount);
+                Console.WriteLine($"Part 1 Answer : {answer1}");
+                var answer2 = groups.Sum(Methods.GetAllYesAnswerCount);
+                Console.WriteLine($"Part 2 Answer : {answer2}");
+            }
         }
     }
 }
